@@ -1,17 +1,14 @@
 #!/usr/bin/env bash
-SDIR="/data/samba/storage"
-SMBDIR="/data/samba/"
+SDIR="/opt/samba/storage"
 DOCKERDIR="/opt/samba"
 SMBCONF="/opt/samba/conf"
 
 # Instlliert den Docker SAMBA Server
-sudo mkdir -p $SDIR/{Data,Backup} && sudo chown -Rv manfred: $SDIR/{Data,Backup}
-sudo mkdir -pv $SDIR  
-sudo chown -Rv manfred: $SMBDIR
-sudo mkdir -pv $DOCKERDIR  && sudo chown -Rv manfred: $DOCKERDIR 
+sudo mkdir -p $SDIR/{Data,Backup}
+sudo chown -Rv manfred: $DOCKERDIR
 
-cp install.sh $DOCKERDIR
-
+cp docker-compse.yaml install.sh $DOCKERDIR
+cp smb.conf users.conf $SMBCONF
 
 cat<<ende
 
