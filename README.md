@@ -11,7 +11,7 @@ git clonehttps://github.com/mntma1/samba.mn
 ## Führe nun folgende Befehle aus:
 ```
 cd samba.mn
-chmod +x instal.sh && install.sh
+chmod +x install.sh && install.sh
 
 cd /opt/samba
 docker-compose up -d
