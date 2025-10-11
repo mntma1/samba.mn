@@ -41,8 +41,8 @@ services:
     container_name: samba
     environment:
       NAME: "Data"
-      USER: "manfred"
-      PASS: "prometheus"
+      USER: "DeinUsername"
+      PASS: "EinSichersPasswort"
       UID: "1000"
       GID: "1000"
     ports:
