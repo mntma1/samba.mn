@@ -17,24 +17,38 @@ cd samba.mn
 
 cd /opt/samba
 ```
+
 **In File: docker-compose.yaml** 
-
 ```
-# Folgene Zeilen nur links vom Dopelpunkt :) anpassen.
-
-# Zeile 7 u. 8
-environment:
-  USER=Benutzername
-  PASS=Passwort
-
+# Folgene Zeilen(Nur links vom Dopelpunkt) anpassen.
 # Zeile 14 u. 15
 volumes:
   - /Pfad/zum/storage:storage # zB. /mnt/ssd
-  - /Pfad/zumr/smb.conf:/etc/samba/smb.conf
+  - /Pfad/zur/smb.conf:/etc/samba/smb.conf
 ```
 
+**Dateien in /opt/samba/conf anpassen.**
+```
+# users.conf
+-> Username:1000:Grupenname:1000:einSicheresPasswort
+```
+```
+# smb.conf
+[Data]
+-> valid users = Username
+
+[Backup]
+-> valid users = Username
+```
+
+**Docker eretellen mit:**
 ```
 docker-compose up -d
 ```
+
+**So ereichst du die SAMBA-Pools [Data,Backup]**
+
+<img width="688" height="171" alt="Bildschirmfoto zu 2025-10-12 02-21-08" src="https://github.com/user-attachments/assets/bfc5ddc5-e098-4cc2-a100-9162e1c5a58d" />
+
 
 # Viel Spaß!
