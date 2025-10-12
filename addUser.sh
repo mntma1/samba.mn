@@ -17,9 +17,9 @@ addsmbuser
 cat<<ende
 
 ===================================================
-Der User ist: $SMBUSER und hat die UID/GID: $SMBUID
+Der neue SMB-Benutzer ist: $SMBUSER und hat die UID/GID: $SMBUID
 
-Das ist der neue Eintrag in der /opt/samba/conf/users.conf
+Dies ist der neue Eintrag in der: /opt/samba/conf/users.conf
 
  $SMBUSER:$SMBUID:$SMBUSER:$SMBUID:$PASSW
 
