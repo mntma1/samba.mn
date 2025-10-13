@@ -6,13 +6,16 @@ SMBGRP="smb"
 SMBGID=101
 
 # Instlliert den Docker SAMBA Server
+clear;
 sudo mkdir -pv $SDIR/{Data,Backup}
 sudo mkdir -pv $SMBCONF
 sudo chown -Rv $USER: $DOCKERDIR
 cp -v docker-compose.yaml install.sh $DOCKERDIR
-cp -v smb.conf users.conf $SMBCONF
+#cp -v smb.conf users.conf $SMBCONF
 
 sleep 3
+
+clear;
 
 echo Erforderliche Angaben sind: 
 echo Benutzername, UserID[N] und das Passwort.
@@ -20,14 +23,49 @@ echo ======================================
 read -p "Den Benutzernamen bitte:" SMBUSER
 echo Diese  ID '(ab 1000 und fortlaufend)' wird in SAMBA neu erstellt
 echo und hat mit dem lockalem User nichts zu tun.
-read -p "Die UserID  bitte:" SMBUID
+read -p "Die UserID  bitte:" USRID
 read -p "Das Passwort bitte:" PASSW
 
-cat<<addsmbuser>>/opt/samba/conf/users.conf
-$SMBUSER:$SMBUID:$SMBUSER:$SMBUID:$PASSW
-addsmbuser
+clear;
 
+cat<<addsmbuser>>/opt/samba/conf/users.conf
+$SMBUSER:$USRID:$SMBGRP:$SMBGID:$PASSW
+addsmbuser
 cat<<ende
+
+cat<<smb.conf>$SMBCONF/smb.conf
+[global]
+        server string = samba
+        idmap config * : range = 3000-7999
+        security = user
+        server min protocol = SMB2
+
+        # disable printing services
+        load printers = no
+        printing = bsd
+        printcap name = /dev/null
+        disable spoolss = yes
+
+[Data]
+        path = /storage/Data
+        comment = Shared
+        valid users = @smb
+        browseable = yes
+        writable = yes
+        read only = no
+        force user = root
+        force group = root
+
+[Backup]
+        path = /storage/Backup
+        comment = Shared
+        valid users = @smb
+        browseable = yes
+        writable = yes
+        read only = no
+        force user = root
+        force group = root
+smb.conf
 
 ===================================================
 Der neue SMB-Benutzer ist: $SMBUSER und hat die UID/GID: $SMBUID
@@ -41,27 +79,20 @@ echo ----------------
 sleep 2
 docker compose -f $DOCKERDIR/docker-compose.yaml up -d
 
-cat<<ende
-
-========================================
-
- And now fire up....
-
-  cd $DOCKERDIR && docker-compose up -d
- oder:
-  docker-compose -f $DOCKERDIR/docker-compose.yaml up -d
-  
-========================================
-
-ende
 
 cat<<fertig
 
-Im Filemanager eingeben: smb://$USER@HOSTNAME/Data
+Die SMB-Freigabein: Data und Backup sind nun erreichbar mit:
 
-Na denn -> Viel Apaß
+Im Filemanager eingeben:
+
+  smb://$(hostname -I | awk '{print $1}' | cut -d/ -f1)/Data | Backup 
+ 
+ oder
+
+  smb://$USER@$HOSTNAME/Data | Backup
 
 fertig
-sleep 2
+sleep 3
 docker logs samba
 exit 0
