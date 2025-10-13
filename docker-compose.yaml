@@ -11,7 +11,7 @@ services:
     ports:
       - 445:445
     volumes:
-      - /opt/samba/storage:/storage
+      - /mnt/ssd/storage:/storage
       - /opt/samba/conf/smb.conf:/etc/samba/smb.conf
       - /opt/samba/conf/users.conf:/etc/samba/users.conf
     restart: always
