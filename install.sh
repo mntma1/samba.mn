@@ -37,7 +37,7 @@ Dies ist der neue Eintrag in der: $SMBCONF/users.conf
 ende
 echo ----------------
 sleep 2
-docker-compose -f /opt/samba/docker-compose.yaml up -d
+docker compose -f $DOCKERDIR/docker-compose.yaml up -d
 
 cat<<ende
 
