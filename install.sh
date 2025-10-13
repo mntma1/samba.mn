@@ -8,8 +8,8 @@ sudo mkdir -pv $SDIR/{Data,Backup}
 sudo mkdir -pv $SMBCONF
 sudo chown -Rv manfred: $DOCKERDIR
 
-cp docker-compose.yaml install.sh $DOCKERDIR
-cp smb.conf users.conf $SMBCONF
+cp -v docker-compose.yaml install.sh $DOCKERDIR
+cp -v smb.conf users.conf $SMBCONF
 
 cat<<ende
 
