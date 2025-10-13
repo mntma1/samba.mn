@@ -6,7 +6,7 @@ SMBCONF="/opt/samba/conf"
 # Instlliert den Docker SAMBA Server
 sudo mkdir -pv $SDIR/{Data,Backup}
 sudo mkdir -pv $SMBCONF
-sudo chown -Rv manfred: $DOCKERDIR
+sudo chown -Rv $USER: $DOCKERDIR
 cp -v docker-compose.yaml install.sh $DOCKERDIR
 cp -v smb.conf users.conf $SMBCONF
 
