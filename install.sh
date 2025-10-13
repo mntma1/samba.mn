@@ -15,10 +15,11 @@ cat<<ende
 
 ========================================
 
-And now....
+And now fire up....
 
  cd $DOCKERDIR && docker-compose up -d
-
+oder:
+ docker-compose -f $DOCKERDIR/docker-compose.yaml up -d
 ========================================
 
 ende
