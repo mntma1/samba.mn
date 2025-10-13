@@ -76,7 +76,7 @@ Dies ist der neue Eintrag in der: $SMBCONF/users.conf
 ende
 echo ----------------
 sleep 2
-##docker compose -f $DOCKERDIR/docker-compose.yaml up -d
+docker compose -f $DOCKERDIR/docker-compose.yaml up -d
 
 
 cat<<fertig
@@ -93,5 +93,5 @@ Im Filemanager eingeben:
 
 fertig
 sleep 3
-##docker logs samba
+docker logs samba
 exit 0
