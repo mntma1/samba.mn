@@ -28,12 +28,12 @@ read -p "Das Passwort bitte:" PASSW
 
 clear;
 
-cat<<addsmbuser>>/opt/samba/conf/users.conf
+cat<<addsmbuser>/opt/samba/conf/users.conf
 $SMBUSER:$USRID:$SMBGRP:$SMBGID:$PASSW
 addsmbuser
 cat<<ende
 
-cat<<smb.conf>$SMBCONF/smb.conf
+cat<<smbconf>/opt/samba/conf/smb.conf
 [global]
         server string = samba
         idmap config * : range = 3000-7999
@@ -65,7 +65,7 @@ cat<<smb.conf>$SMBCONF/smb.conf
         read only = no
         force user = root
         force group = root
-smb.conf
+smbconf
 
 ===================================================
 Der neue SMB-Benutzer ist: $SMBUSER und hat die UID/GID: $SMBUID
