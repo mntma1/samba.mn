@@ -2,6 +2,8 @@
 SDIR="/mnt/ssd/storage"
 DOCKERDIR="/opt/samba"
 SMBCONF="/opt/samba/conf"
+SMBGRP="smb"
+SMBGID=101
 
 # Instlliert den Docker SAMBA Server
 sudo mkdir -pv $SDIR/{Data,Backup}
@@ -32,7 +34,7 @@ Der neue SMB-Benutzer ist: $SMBUSER und hat die UID/GID: $SMBUID
 
 Dies ist der neue Eintrag in der: $SMBCONF/users.conf
 
- $SMBUSER:$SMBUID:$SMBUSER:$SMBUID:$PASSW
+ $SMBUSER:$SMBUID:$SMBGRP:$SMBGID:$PASSW
 
 ende
 echo ----------------
