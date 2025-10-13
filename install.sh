@@ -5,18 +5,19 @@ SMBCONF="/opt/samba/conf"
 SMBGRP="smb"
 SMBGID=101
 
-# Instlliert den Docker SAMBA Server
+# Erstellt die Verzeichnisse
 clear;
 sudo mkdir -pv $SDIR/{Data,Backup}
 sudo mkdir -pv $SMBCONF
 sudo chown -Rv $USER: $DOCKERDIR
 cp -v docker-compose.yaml install.sh $DOCKERDIR
-cp -v smb.conf users.conf $SMBCONF
+#cp -v smb.conf users.conf $SMBCONF
 
 sleep 5
 
 clear;
 
+# Abfrage der User-Daten 
 echo Erforderliche Angaben sind: 
 echo Benutzername, UserID[N] und das Passwort.
 echo ======================================
@@ -28,10 +29,12 @@ read -p "Das Passwort bitte:" PASSW
 
 clear;
 
-cat<<addsmbuser>$SMBCONF/users.conf
+# Erstellt die users.conf
+cat<<addsmbuser>/tmp/users.conf
 $SMBUSER:$USRID:$SMBGRP:$SMBGID:$PASSW
 addsmbuser
 
+# Erstellt die smb.conf
 cat<<configsmb>/tmp/smb.conf
 [global]
         server string = samba
@@ -48,7 +51,7 @@ cat<<configsmb>/tmp/smb.conf
 [Data]
         path = /storage/Data
         comment = Shared
-        valid users = $SMBUSER 
+        valid users = @smb 
         browseable = yes
         writable = yes
         read only = no
@@ -58,14 +61,17 @@ cat<<configsmb>/tmp/smb.conf
 [Backup]
         path = /storage/Backup
         comment = Shared
-        valid users = $SMBUSER
+        valid users = @smb
         browseable = yes
         writable = yes
         read only = no
         force user = root
         force group = root
 configsmb
+
+# Kopiert die Konfigs 
 mv /tmp/smb.conf $SMBCONF
+mv /tmp/users.conf $SMBCONF
 
 cat<<ende
 ===================================================
@@ -80,6 +86,8 @@ ende
 echo ----------------
 
 sleep 2
+
+# Startet den Container
 docker compose -f $DOCKERDIR/docker-compose.yaml up -d
 
 cat<<fertig
@@ -95,6 +103,7 @@ Im Filemanager eingeben:
   smb://$USER@$HOSTNAME/Data | Backup
 
 fertig
+
 sleep 3
 docker logs samba
 exit 0
