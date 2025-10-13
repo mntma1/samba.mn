@@ -32,7 +32,7 @@ cat<<addsmbuser>$SMBCONF/users.conf
 $SMBUSER:$USRID:$SMBGRP:$SMBGID:$PASSW
 addsmbuser
 
-cat<<configsmb>$SMBCONF/smb.conf
+cat<<configsmb>/tmp/smb.conf
 [global]
         server string = samba
         idmap config * : range = 3000-7999
@@ -65,6 +65,7 @@ cat<<configsmb>$SMBCONF/smb.conf
         force user = root
         force group = root
 configsmb
+mv /tmp/smb.conf $SMBCONF
 
 cat<<ende
 ===================================================
