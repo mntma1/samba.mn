@@ -11,9 +11,9 @@ sudo mkdir -pv $SDIR/{Data,Backup}
 sudo mkdir -pv $SMBCONF
 sudo chown -Rv $USER: $DOCKERDIR
 cp -v docker-compose.yaml install.sh $DOCKERDIR
-#cp -v smb.conf users.conf $SMBCONF
+cp -v smb.conf users.conf $SMBCONF
 
-sleep 3
+sleep 5
 
 clear;
 
@@ -28,12 +28,11 @@ read -p "Das Passwort bitte:" PASSW
 
 clear;
 
-cat<<addsmbuser>/opt/samba/conf/users.conf
+cat<<addsmbuser>$SMBCONF/users.conf
 $SMBUSER:$USRID:$SMBGRP:$SMBGID:$PASSW
 addsmbuser
-cat<<ende
 
-cat<<smbconf>/opt/samba/conf/smb.conf
+cat<<smbconf>$SMBCONF/smb.conf
 [global]
         server string = samba
         idmap config * : range = 3000-7999
@@ -77,7 +76,7 @@ Dies ist der neue Eintrag in der: $SMBCONF/users.conf
 ende
 echo ----------------
 sleep 2
-docker compose -f $DOCKERDIR/docker-compose.yaml up -d
+##docker compose -f $DOCKERDIR/docker-compose.yaml up -d
 
 
 cat<<fertig
@@ -94,5 +93,5 @@ Im Filemanager eingeben:
 
 fertig
 sleep 3
-docker logs samba
+##docker logs samba
 exit 0
