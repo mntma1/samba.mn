@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-SDIR="/opt/samba/storage"
+SDIR="/mnt/ssd/storage"
 DOCKERDIR="/opt/samba"
 SMBCONF="/opt/samba/conf"
 
