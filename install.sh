@@ -32,7 +32,7 @@ cat<<addsmbuser>$SMBCONF/users.conf
 $SMBUSER:$USRID:$SMBGRP:$SMBGID:$PASSW
 addsmbuser
 
-cat<<smbconf>$SMBCONF/smb.conf
+cat<<configsmb>$SMBCONF/smb.conf
 [global]
         server string = samba
         idmap config * : range = 3000-7999
@@ -48,7 +48,7 @@ cat<<smbconf>$SMBCONF/smb.conf
 [Data]
         path = /storage/Data
         comment = Shared
-        valid users = @smb
+        valid users = $SMBUSER 
         browseable = yes
         writable = yes
         read only = no
@@ -58,14 +58,15 @@ cat<<smbconf>$SMBCONF/smb.conf
 [Backup]
         path = /storage/Backup
         comment = Shared
-        valid users = @smb
+        valid users = $SMBUSER
         browseable = yes
         writable = yes
         read only = no
         force user = root
         force group = root
-smbconf
+configsmb
 
+cat<<ende
 ===================================================
 Der neue SMB-Benutzer ist: $SMBUSER und hat die UID/GID: $SMBUID
 
@@ -74,10 +75,11 @@ Dies ist der neue Eintrag in der: $SMBCONF/users.conf
  $SMBUSER:$SMBUID:$SMBGRP:$SMBGID:$PASSW
 
 ende
+
 echo ----------------
+
 sleep 2
 docker compose -f $DOCKERDIR/docker-compose.yaml up -d
-
 
 cat<<fertig
 
