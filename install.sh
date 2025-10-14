@@ -7,25 +7,36 @@ SMBGID=101
 
 # Erstellt die Verzeichnisse
 clear;
-sudo mkdir -pv $SDIR/{Data,Backup}
-sudo mkdir -pv $SMBCONF
-sudo chown -Rv $USER: $DOCKERDIR
-cp -v docker-compose.yaml install.sh $DOCKERDIR
-#cp -v smb.conf users.conf $SMBCONF
+sudo mkdir -p $SDIR/{Data,Backup}
+sudo mkdir -p $SMBCONF
+sudo chown -R $USER: $DOCKERDIR
+cp docker-compose.yaml install.sh $DOCKERDIR
+
+cat<<anfang
+
+Installiere den SAMBA Container 
+Bitte warten....
+
+anfang
 
 sleep 5
-
 clear;
 
 # Abfrage der User-Daten 
 echo Erforderliche Angaben sind: 
-echo Benutzername, UserID[N] und das Passwort.
+echo Benutzername '| UserID [Nr,] |' und das Passwort.
 echo ======================================
-read -p "Den Benutzernamen bitte:" SMBUSER
+read -p "Den Benutzernamen bitte: " SMBUSER
+echo
 echo Diese  ID '(ab 1000 und fortlaufend)' wird in SAMBA neu erstellt
 echo und hat mit dem lockalem User nichts zu tun.
-read -p "Die UserID  bitte:" USRID
-read -p "Das Passwort bitte:" PASSW
+echo ======================================
+read -p "Die UserID  bitte: " USRID
+echo
+echo Das Passwort bitte gut merken
+echo ======================================
+read -p "Das Passwort bitte: " PASSW
+echo
 
 clear;
 
@@ -73,26 +84,44 @@ configsmb
 mv /tmp/smb.conf $SMBCONF
 mv /tmp/users.conf $SMBCONF
 
-cat<<ende
+cat<<info
 ===================================================
-Der neue SMB-Benutzer ist: $SMBUSER und hat die UID/GID: $SMBUID
+Der neue SMB-Benutzer ist: $SMBUSER und hat die UID:$USRID 
 
 Dies ist der neue Eintrag in der: $SMBCONF/users.conf
 
- $SMBUSER:$SMBUID:$SMBGRP:$SMBGID:$PASSW
+ $SMBUSER:$USRID:$SMBGRP:$SMBGID:$PASSW
 
-ende
-
-echo ----------------
+info
 
 sleep 2
 
 # Startet den Container
+cat<<startcontainer
+
+  ....Starte den Container
+
+startcontainer
+
 docker compose -f $DOCKERDIR/docker-compose.yaml up -d
 
 cat<<fertig
 
-Die SMB-Freigabein: Data und Backup sind nun erreichbar mit:
+...Ferig
+
+fertig
+
+sleep 3
+
+docker logs samba
+
+cat<<ende
+
+Der SAMBA Container mit der Image-ID: $(docker ps|grep samba  | awk '{print $1}' | cut -d/ -f1) wurde installiert.
+
+
+
+Die SMB-Freigaben: [Data] und [Backup]  sind jetzt erreichbar!
 
 Im Filemanager eingeben:
 
@@ -102,8 +131,6 @@ Im Filemanager eingeben:
 
   smb://$USER@$HOSTNAME/Data | Backup
 
-fertig
+ende
 
-sleep 3
-docker logs samba
 exit 0
