@@ -30,3 +30,8 @@ docker restart samba
 
 
 # Viel Spaß!
+
+
+## Sterngucker im Laufe der Zeit
+[![Stargazers over time](https://starchart.cc/dockur/samba.svg?background=%23238299&axis=%23333333&line=%23df2525)](https://starchart.cc/dockur/samba)
+
