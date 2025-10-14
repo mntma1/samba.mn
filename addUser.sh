@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-#read -p "Mötest du noch einen weiteren Samba User hinzufügen?" SMBUSER  
+# Created by Manfred - 14.10.2025
+#
+#read -p "Möchtest du noch einen weiteren Samba User hinzufügen?" SMBUSER
 clear;
 echo Erforderliche Angaben sind: 
 echo Benutzername, UserID[N] und das Passwort.

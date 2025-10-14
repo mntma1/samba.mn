@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Created by Manfred - 14.10.2025
+#
 SDIR="/mnt/ssd/storage"
 DOCKERDIR="/opt/samba"
 SMBCONF="/opt/samba/conf"
