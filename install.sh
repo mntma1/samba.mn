@@ -14,9 +14,7 @@ USERSGRPID=100
 SMBGID=101
 
 # Backup User
-BUUSR=backupusr
 BGRP="@backupusr"
-BUGID=1004
 
 # Erstellt die Verzeichnisse
 clear;
@@ -48,15 +46,6 @@ echo
 echo Das Passwort bitte, gut merken
 echo ======================================
 read -p "Das Passwort bitte: " PASSW
-# Backup User # neu
-echo
-echo Den Backup-User anlegen
-echo ======================================
-read -p "Den Backup-Benutzernamen  bitte: " BUSER
-echo
-echo Das Passwort für den Backupuser, bitte gut merken
-echo ======================================
-read -p "Das Backup Passwort bitte: " BPASSW
 
 
 clear;
@@ -64,7 +53,6 @@ clear;
 # Erstellt die users.conf
 cat<<addsmbuser>/tmp/users.conf
 $SMBUSER:$USRID:$SMBUGRP:$USERSGRPID:$PASSW
-$BUSER:$BUGID:$BUUSR:$BUGID:$BPASSW 
 addsmbuser
 
 # neu
@@ -95,7 +83,7 @@ cat<<configsmb>/tmp/smb.conf
 [Backup]
         path = /storage/Backup
         comment = Shared
-        valid users = $BGRP
+        valid users = $SMBUSER
         browseable = yes
         writable = yes
         read only = no
@@ -114,7 +102,10 @@ Der neue SMB-Benutzer ist: $SMBUSER und hat die UID:$USRID
 Dies ist der neue Eintrag in der: $SMBCONF/users.conf
 
  $SMBUSER:$USRID:$SMBGRP:$SMBGID:$PASSW
- $BUSER:$BUGID:$BUUSR:$BUGID:$BPASSW 
+ 
+ $SMBUSER ist auch der Backup-User
+
+Neu Benutzer können mit: addUser.sh angelegt werden.
 
 info
 
