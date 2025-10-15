@@ -1,15 +1,26 @@
 #!/usr/bin/env bash
 # Created by Manfred - 14.10.2025
 #
+# Verzeichnisse
+SSDDIR="/mnt/ssd"
 SDIR="/mnt/ssd/storage"
 DOCKERDIR="/opt/samba"
 SMBCONF="/opt/samba/conf"
-SMBGRP="smb"
+
+# User
+SMBUGRP="users"
+SMBGRP="@users"
+USERSGRPID=100
 SMBGID=101
+
+# Backup User
+BUUSR=backupusr
+BGRP="@backupusr"
+BUGID=1004
 
 # Erstellt die Verzeichnisse
 clear;
-sudo mkdir -p $SDIR/{Data,Backup}
+sudo mkdir -p $SDIR/{Data,Backup}; sudo chown -Rv $USER: $SSDDIR
 sudo mkdir -p $SMBCONF
 sudo chown -R $USER: $DOCKERDIR
 cp docker-compose.yaml install.sh $DOCKERDIR
@@ -21,12 +32,11 @@ Bitte warten....
 
 anfang
 
-sleep 5
+sleep 3
 clear;
 
 # Abfrage der User-Daten 
 echo Erforderliche Angaben sind: 
-echo Benutzername '| UserID [Nr,] |' und das Passwort.
 echo ======================================
 read -p "Den Benutzernamen bitte: " SMBUSER
 echo
@@ -35,18 +45,29 @@ echo und hat mit dem lockalem User nichts zu tun.
 echo ======================================
 read -p "Die UserID  bitte: " USRID
 echo
-echo Das Passwort bitte gut merken
+echo Das Passwort bitte, gut merken
 echo ======================================
 read -p "Das Passwort bitte: " PASSW
+# Backup User # neu
 echo
+echo Den Backup-User anlegen
+echo ======================================
+read -p "Den Backup-Benutzernamen  bitte: " BUSER
+echo
+echo Das Passwort für den Backupuser, bitte gut merken
+echo ======================================
+read -p "Das Backup Passwort bitte: " BPASSW
+
 
 clear;
-
+# neu
 # Erstellt die users.conf
 cat<<addsmbuser>/tmp/users.conf
-$SMBUSER:$USRID:$SMBGRP:$SMBGID:$PASSW
+$SMBUSER:$USRID:$SMBUGRP:$USERSGRPID:$PASSW
+$BUSER:$BUGID:$BUUSR:$BUGID:$BPASSW 
 addsmbuser
 
+# neu
 # Erstellt die smb.conf
 cat<<configsmb>/tmp/smb.conf
 [global]
@@ -64,7 +85,7 @@ cat<<configsmb>/tmp/smb.conf
 [Data]
         path = /storage/Data
         comment = Shared
-        valid users = @smb 
+        valid users = $SMBGRP 
         browseable = yes
         writable = yes
         read only = no
@@ -74,7 +95,7 @@ cat<<configsmb>/tmp/smb.conf
 [Backup]
         path = /storage/Backup
         comment = Shared
-        valid users = @smb
+        valid users = $BGRP
         browseable = yes
         writable = yes
         read only = no
@@ -93,15 +114,15 @@ Der neue SMB-Benutzer ist: $SMBUSER und hat die UID:$USRID
 Dies ist der neue Eintrag in der: $SMBCONF/users.conf
 
  $SMBUSER:$USRID:$SMBGRP:$SMBGID:$PASSW
+ $BUSER:$BUGID:$BUUSR:$BUGID:$BPASSW 
 
 info
 
-sleep 2
-
 # Startet den Container
+sleep 2
 cat<<startcontainer
 
-  ....Starte den Container
+  ....Starte den SAMBA Container
 
 startcontainer
 
