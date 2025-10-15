@@ -17,14 +17,10 @@ cd samba.mn
 ```
 ## Der Rest ergibt sich von selbst.
 
-**Evtl. die Dateien in /opt/samba/conf anpassen.**
+- Der erste Benutzer, welcher mit dem **install.sh** angelegt wurde ist auch ein Backup_User und hat zugriff auf: **[/Data]** u. **[/Backup]**
+- Weitere Benutzer können mit **addUser.sh** angelegt werden und haben dann nur zugriff auf: **[/Data]**. 
 
-danach dann immer: 
-```
-docker restart samba
-```
-
-**So ereichst du die SAMBA-Shares [Data,Backup]**
+**So erreichst Du die SAMBA-Shares [Data,Backup]**
 
 <img width="688" height="171" alt="Bildschirmfoto zu 2025-10-12 02-21-08" src="https://github.com/user-attachments/assets/bfc5ddc5-e098-4cc2-a100-9162e1c5a58d" />
 
