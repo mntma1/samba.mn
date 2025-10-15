@@ -1,19 +1,27 @@
 #!/usr/bin/env bash
 # Created by Manfred - 14.10.2025
 #
-#read -p "Möchtest du noch einen weiteren Samba User hinzufügen?" SMBUSER
+# User
+SMBUGRP="users"
+SMBGRP="@users"
+USERSGRPID=100
+SMBGID=101
+
 clear;
-echo Erforderliche Angaben sind: 
-echo Benutzername, UserID[N] und das Passwort.
+echo Einen neuen Benutzer erstellen
 echo ======================================
 read -p "Den Benutzernamen bitte:" SMBUSER  
-echo Diese  ID '(ab 1000 und fortlaufend)' wird in SAMBA neu erstellt
-echo und hat mit dem lockalem User nichts zu tun.
-read -p "Die UserID  bitte:" SMBUID
+echo
+echo Diese  ID muss höher als 1000 sein'(1001 und fortlaufend)'
+echo ======================================
+read -p "Die UserID  bitte:" UUID
+echo
+echo Das Passwort bitte gut merken
+echo ======================================
 read -p "Das Passwort bitte:" PASSW
 
 cat<<addsmbuser>>/opt/samba/conf/users.conf
-$SMBUSER:$SMBUID:$SMBUSER:$SMBUID:$PASSW
+$SMBUSER:$UUID:$SMBUGRP:$USERSGRPID:$PASSW
 addsmbuser
 
 cat<<ende
@@ -23,7 +31,7 @@ Der neue SMB-Benutzer ist: $SMBUSER und hat die UID/GID: $SMBUID
 
 Dies ist der neue Eintrag in der: /opt/samba/conf/users.conf
 
- $SMBUSER:$SMBUID:$SMBUSER:$SMBUID:$PASSW
+ $SMBUSER:$UUID:$SMBUGRP:$USERSGRPID:$PASSW
 
 Vielen Dank.
 
@@ -33,3 +41,4 @@ docker restart samba
 sleep 3
 docker logs samba
 exit 0
+#yesno  'Möchtest Du einen weiteren Benutzer anlegen?'
