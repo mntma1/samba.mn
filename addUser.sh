@@ -22,17 +22,17 @@ SMBGID=101
 clear;
 echo Einen weiteren Benutzer erstellen
 echo ======================================
-read -p "Den Benutzernamen bitte:" SMBUSER  
+read -p "Den Benutzernamen bitte: " SMBUSER  
 echo
-echo Diese  ID muss höher als 1000 sein'(1001 und fortlaufend)'
+echo Die  UID muss höher als 1000 sein'(1001 und fortlaufend)'
 echo ======================================
-read -p "Die UserID  bitte:" UUID
+read -p "Die UID  bitte: " UUID
 echo
 echo Das Passwort bitte gut merken
 echo ======================================
-read -p "Das Passwort bitte:" PASSW
+read -p "Das Passwort bitte: " PASSW
 
-cat<<addsmbuser>>/opt/samba/conf/users.conf
+cat>>/opt/samba/conf/users.conf<<addsmbuser
 $SMBUSER:$UUID:$SMBUGRP:$USERSGRPID:$PASSW
 addsmbuser
 
@@ -45,6 +45,7 @@ Dies ist der neue Eintrag in der: /opt/samba/conf/users.conf
 
  $SMBUSER:$UUID:$SMBUGRP:$USERSGRPID:$PASSW
 
+===================================================
 Vielen Dank.
 
 ende
@@ -65,11 +66,10 @@ while true; do
     case $yn in
         [Jj]* ) break;;
         [Nn]* ) exit;;
-        * ) echo -e "$RD
-                     
-                     Bitte antworte mit [j]a oder [n]ein.;;
-
-                     $CL"
+        * ) echo; 
+echo -e "$RD                 
+ Bitte antworte mit [j]a oder [n]ein.;;
+$CL"
 
     esac
 done
