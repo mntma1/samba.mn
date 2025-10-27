@@ -1,6 +1,18 @@
 #!/usr/bin/env bash
 # Created by Manfred - 14.10.2025
 #
+
+WT=`echo "\033[01;37m"`     # white
+RD=`echo "\033[01;31m"`     # red
+GN=`echo "\033[1;92m"`      # green 
+BGN=`echo "\033[4;92m"`     # green underline
+DGN=`echo "\033[32m"`       # dark green
+CL=`echo "\033[m"`      # clean
+BFR="\\r\\033[K"        # clear and new line
+HOLD="*"            # character in front of msg_info
+CM="${GN}✓${C}"     # green hook
+CROSS="${RD}✗${CL}"     # red cross
+
 # User
 SMBUGRP="users"
 SMBGRP="@users"
@@ -8,7 +20,7 @@ USERSGRPID=100
 SMBGID=101
 
 clear;
-echo Einen neuen Benutzer erstellen
+echo Einen weiteren Benutzer erstellen
 echo ======================================
 read -p "Den Benutzernamen bitte:" SMBUSER  
 echo
@@ -40,5 +52,28 @@ echo ---------------------------------------------------------------------------
 docker restart samba
 sleep 3
 docker logs samba
+
+echo -e "$GN
+
+          Einen weiter Benutzer anlegen? 
+
+$CL"
+
+function  add-user {
+while true; do
+    read -p " Möchtest Du noch einen Samba Benutzer anlegen? (j/n): " yn
+    case $yn in
+        [Jj]* ) break;;
+        [Nn]* ) exit;;
+        * ) echo -e "$RD
+                     
+                     Bitte antworte mit [j]a oder [n]ein.;;
+
+                     $CL"
+
+    esac
+done
+}
+add-user
+./addUser.sh
 exit 0
-#yesno  'Möchtest Du einen weiteren Benutzer anlegen?'
