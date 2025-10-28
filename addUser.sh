@@ -56,7 +56,7 @@ docker logs samba
 
 echo -e "$GN
 
-          Einen weiter Benutzer anlegen? 
+          Einen weiteren Benutzer anlegen? 
 
 $CL"
 
