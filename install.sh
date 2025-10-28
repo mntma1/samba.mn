@@ -67,7 +67,7 @@ sudo mkdir -pv $SDIR/{Data,Backup}; sudo chown -Rv $USER: $SSDDIR
 sudo mkdir -pv $SMBCONF
 sudo chown -Rv $USER: $DOCKERDIR
 cp -fv docker-compose-smb.yaml $DOCKERDIR/docker-compose.yaml 
-cp -fv test_install_SMB.sh $DOCKERDIR
+cp -fv install.sh $DOCKERDIR
 sleep 3
 }
 
