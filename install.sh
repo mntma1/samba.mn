@@ -46,13 +46,14 @@ $CL"
 
 # Yes No
 function ja-nein {
+echo
 while true; do
     read -p " Mit der Installation fortfahren? (j/n): " yn
     case $yn in
         [Jj]* ) break;;
         [Nn]* ) exit;;
-        * ) echo; 
-echo -e "${RD}    
+        * ) echo;
+echo -e "${RD}
  Bitte antworte mit [j]a oder [n]ein.         
 ${CL}";;
     esac
@@ -95,8 +96,7 @@ echo
 echo Das Passwort für den Backupuser, bitte gut merken
 echo ======================================
 read -s -p "Das Backup Passwort bitte: " BPASSW
-
-
+echo
 echo -e "$GN
 
     Benutzername:  $SMBUSER
@@ -246,7 +246,7 @@ while true; do
     case $yn in
         [Jj]* ) break;;
         [Nn]* ) exit;;
-        * ) echo -e " $RD Bitte antworte mit [j]a oder [n]ein. $CL ;; "
+        * ) echo -e " $RD Bitte antworte mit [j]a oder [n]ein. $CL ";;
     esac
 done
 ./addUser.sh
@@ -263,6 +263,7 @@ config-smb
 copy-configs
 config-info
 start-container
+info-fertig
 add-user
 
 exit 0
