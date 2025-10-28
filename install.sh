@@ -74,7 +74,7 @@ sleep 3
 # Abfrage der User-Daten 
 function ask-userdata {
 echo
-echo Erforderliche bitte ausfüllen : 
+echo Name des Admins: $USER 
 echo ======================================
 read -p "Den Benutzernamen bitte: " SMBUSER
 echo
@@ -85,7 +85,7 @@ read -p "Die UserID  bitte: " USRID
 echo
 echo Das Passwort bitte, gut merken
 echo ======================================
-read -p "Das Passwort bitte: " PASSW
+read -s -p "Das Passwort bitte: " PASSW
 # Backup User # neu
 echo
 echo Den Backup User anlegen
@@ -94,7 +94,7 @@ read -p "Den Backup Benutzernamen  bitte: " BUSER
 echo
 echo Das Passwort für den Backupuser, bitte gut merken
 echo ======================================
-read -p "Das Backup Passwort bitte: " BPASSW
+read -s -p "Das Backup Passwort bitte: " BPASSW
 
 
 echo -e "$GN
