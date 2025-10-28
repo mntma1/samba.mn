@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # Created by Manfred - 14.10.2025
-#
-#
+# Changed by Manfred - 28.10.2025
 # Colors
 RD=`echo "\033[01;31m"` # red
 GN=`echo "\033[1;92m"`  # green
@@ -263,6 +262,7 @@ config-smb
 copy-configs
 config-info
 start-container
+info-fertig
 add-user
 
 exit 0
