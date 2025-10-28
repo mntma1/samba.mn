@@ -126,8 +126,6 @@ $CL ";;
 done
 }
 
-clear;
-
 # Erstellt die users.conf
 function add-smbuser {
 cat>/tmp/users.conf<<addsmbuser
