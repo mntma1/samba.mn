@@ -70,7 +70,6 @@ cp -fv test_install_SMB.sh $DOCKERDIR
 sleep 3
 }
 
-
 # Abfrage der User-Daten 
 function ask-userdata {
 echo
@@ -138,7 +137,6 @@ addsmbuser
 }
 
 # Erstellt die smb.conf
-
 function config-smb {
 cat>/tmp/smb.conf<<configsmb
 [global]
