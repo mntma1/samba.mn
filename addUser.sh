@@ -75,5 +75,5 @@ $CL"
 done
 }
 add-user
-./addUser.sh
+$0
 exit 0
