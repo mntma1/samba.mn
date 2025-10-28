@@ -131,7 +131,7 @@ clear;
 
 # Erstellt die users.conf
 function add-smbuser {
-cat<<addsmbuser>/tmp/users.conf
+cat>/tmp/users.conf<<addsmbuser
 $SMBUSER:$USRID:$SMBUGRP:$USERSGRPID:$PASSW
 $BUSER:$BUGID:$BUUSR:$BUGID:$BPASSW 
 addsmbuser
@@ -140,7 +140,7 @@ addsmbuser
 # Erstellt die smb.conf
 
 function config-smb {
-cat<<configsmb>/tmp/smb.conf
+cat>/tmp/smb.conf<<configsmb
 [global]
         server string = samba
         idmap config * : range = 3000-7999
