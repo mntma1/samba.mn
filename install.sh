@@ -233,8 +233,6 @@ Im Filemanager eingeben:
 ende
 }
 
-sleep 3
-
 # Yes or No
 function add-user {
 while true; do
