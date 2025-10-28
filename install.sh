@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Created by Manfred - 14.10.2025
-# Changed by Manfred - 28.10.2025
+# Modifyed by Manfred - 28.10.2025
+
 # Colors
 RD=`echo "\033[01;31m"` # red
 GN=`echo "\033[1;92m"`  # green
@@ -61,7 +62,7 @@ done
 
 # Erstellt die Verzeichnisse
 function mk-dirs {
-sudo rm -rfv /tmp/samba/ /tmp/ssd/
+sudo rm -rfv $DOCKERDIR $SSDDIR
 sudo mkdir -pv $SDIR/{Data,Backup}; sudo chown -Rv $USER: $SSDDIR
 sudo mkdir -pv $SMBCONF
 sudo chown -Rv $USER: $DOCKERDIR
@@ -73,25 +74,30 @@ sleep 3
 # Abfrage der User-Daten 
 function ask-userdata {
 echo
-echo Name des Admins: $USER 
+echo Name des Admins.
+echo Hier z.B. [$USER] 
 echo ======================================
 read -p "Den Benutzernamen bitte: " SMBUSER
 echo
 echo Diese  ID '(ab 1000 und fortlaufend)' wird in SAMBA neu erstellt
 echo und hat mit dem lockalem User nichts zu tun.
-echo ======================================
+echo Hier z.B. [$UID]
+echo =============================================
 read -p "Die UserID  bitte: " USRID
 echo
 echo Das Passwort bitte, gut merken
 echo ======================================
 read -s -p "Das Passwort bitte: " PASSW
+echo
 # Backup User # neu
 echo
-echo Den Backup User anlegen
+echo Den Backup User anlegen.
+echo Hier z.B. [Backupuser]
 echo ======================================
-read -p "Den Backup Benutzernamen  bitte: " BUSER
+read -p "Den Backup Benutzernamen bitte: " BUSER
 echo
-echo Das Passwort für den Backupuser, bitte gut merken
+echo Das Passwort für den Backupuser, 
+echo Bitte gut merken.
 echo ======================================
 read -s -p "Das Backup Passwort bitte: " BPASSW
 echo
@@ -220,11 +226,13 @@ Die SMB-Freigaben: [Data] und [Backup]  sind jetzt erreichbar!
 
 Im Filemanager eingeben:
 
-  smb://$(hostname -I | awk '{print $1}' | cut -d/ -f1)/Data | Backup 
+  smb://$SMBUSER@$(hostname -I | awk '{print $1}' | cut -d/ -f1)/Data 
+  smb://$BUSER@$(hostname -I | awk '{print $1}' | cut -d/ -f1)/Backup 
  
  oder
 
-  smb://$USER@$HOSTNAME/Data | Backup
+  smb://$SMBUSER@$HOSTNAME/Data
+  smb://$BUSER@$HOSTNAME/Backup
 
 ende
 }
