@@ -219,7 +219,7 @@ sleep 3
 
 cat<<ende
 
-Der SAMBA Container mit der Image-ID: $(docker ps|grep samba-test  | awk '{print $1}' | cut -d/ -f1) wurde installiert.
+Der SAMBA Container mit der Image-ID: $(docker ps|grep samba  | awk '{print $1}' | cut -d/ -f1) wurde installiert.
 
 
 
