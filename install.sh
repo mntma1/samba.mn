@@ -16,7 +16,7 @@ CROSS="${RD}✗${CL}"     # red cross
 # Verzeichnisse
 SSDDIR="/mnt/ssd"
 SDIR="/mnt/ssd/storage"
-DOCKERDIR="/optp/samba"
+DOCKERDIR="/opt/samba"
 SMBCONF="/opt/samba/conf"
 
 # User
