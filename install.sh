@@ -32,6 +32,36 @@ BUGID=1004
 
 clear;
 
+function check-inst {
+clear
+if [ -d /opt/samba ]; then
+   echo -e "$RD 
+
+  SAMBA DOCKER ist schon installiert.
+
+$CL"
+   sleep 3
+clear
+while true; do
+    read -p "  Mit der Installation trotzdem fortfahren? (j/n): " yn
+    case $yn in
+        [Jj]* ) break;;
+        [Nn]* ) exit;;
+        * ) echo
+            echo -e "$RD
+
+  Bitte antworte mit (j)a oder (n])in.
+
+$CL";;
+    esac
+done
+ else
+  echo -e "$GN    Installiere nun SAMBA DOCKER. $CL"
+ sleep 3
+fi
+
+}
+
 # Beginn Installation
 function inst-info {
 
@@ -251,6 +281,7 @@ done
 }
 
 # Install starts
+check-inst
 inst-info
 ja-nein
 mk-dirs
