@@ -9,7 +9,7 @@ CYN=`echo "\033[0;36m"`   # cyan
 CYNB=`echo "\033[01;36m"` # cyan bold
 BLU=`echo "\033[0;34m"`   # blue
 BLUB=`echo "\033[01;34m"` # blue bold
-RD=`echo "\033[01;31m"` # redi bold
+RD=`echo "\033[01;31m"` # red bold
 GN=`echo "\033[1;92m"`  # green bold
 BGN=`echo "\033[4;92m"` # green underline
 DGN=`echo "\033[32m"`   # dark green
@@ -110,7 +110,6 @@ done
 #------------------------------------------------------------------------------
 function mk-dirs {
 ./uninstall_SAMBA.sh
-echo
 sudo rm -rf /mnt/samba/
 sudo mkdir -p $SDIR/{Data,Backup}; sudo chown -R $USER: $SSDDIR
 sudo mkdir -p $SMBCONF
