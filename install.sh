@@ -109,6 +109,7 @@ done
 # Erstellt die Verzeichnisse
 #------------------------------------------------------------------------------
 function mk-dirs {
+./uninstall_SAMBA.sh
 echo
 sudo rm -rf /mnt/samba/
 sudo mkdir -p $SDIR/{Data,Backup}; sudo chown -R $USER: $SSDDIR
