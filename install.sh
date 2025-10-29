@@ -44,7 +44,7 @@ SMBUGRP="users"
 SMBGRP="@users"
 
 function check-inst {
-if [ -d /tmp/samba ]; then 
+if [ -d /opt/samba ]; then 
    echo -e "$RD 
 
  Der SAMBA Container ist bereits installiert. 
