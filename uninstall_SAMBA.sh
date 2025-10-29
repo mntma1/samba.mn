@@ -3,8 +3,8 @@
 #
 docker compose -f /opt/samba/docker-compose.yaml down 
 docker image rm  $(docker image ls|grep samba | awk '{print $3}' | cut -d/ -f1)
-sudo rm -rfv /mnt/ssd/ /opt/samba/
 sleep 3
+sudo rm -rfv /mnt/ssd/ /opt/samba/
 clear
 cat<<ende
 
