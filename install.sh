@@ -2,9 +2,15 @@
 # Created by Manfred - 14.10.2025
 # Modifyed by Manfred - 28.10.2025
 
+#-------------
 # Colors
-RD=`echo "\033[01;31m"` # red
-GN=`echo "\033[1;92m"`  # green
+#-------------
+CYN=`echo "\033[0;36m"`   # cyan
+CYNB=`echo "\033[01;36m"` # cyan bold
+BLU=`echo "\033[0;34m"`   # blue
+BLUB=`echo "\033[01;34m"` # blue bold
+RD=`echo "\033[01;31m"` # redi bold
+GN=`echo "\033[1;92m"`  # green bold
 BGN=`echo "\033[4;92m"` # green underline
 DGN=`echo "\033[32m"`   # dark green
 CL=`echo "\033[m"`      # clean
@@ -13,57 +19,64 @@ HOLD="*"                # character in front of msg_info
 CM="${GN}✓${C}"         # green hook
 CROSS="${RD}✗${CL}"     # red cross
 
+#------------------
 # Verzeichnisse
+#------------------
 SSDDIR="/mnt/ssd"
 SDIR="/mnt/ssd/storage"
 DOCKERDIR="/opt/samba"
 SMBCONF="/opt/samba/conf"
 
+#-------------
 # User
-SMBUGRP="users"
-SMBGRP="@users"
+#-------------
 USERSGRPID=100
 SMBGID=101
+USRID=1000
+BUGID=1001
 
+#-------------
 # Backup User
+#-------------
 BUUSR="backupusr"
 BGRP="@backupusr"
-BUGID=1004
-
-clear;
+SMBUGRP="users"
+SMBGRP="@users"
 
 function check-inst {
-clear
-if [ -d /opt/samba ]; then
+if [ -d /tmp/samba ]; then 
    echo -e "$RD 
 
-  SAMBA DOCKER ist schon installiert.
+ Der SAMBA Container ist bereits installiert. 
 
 $CL"
-   sleep 3
-clear
+sleep 3
+#clear
 while true; do
-    read -p "  Mit der Installation trotzdem fortfahren? (j/n): " yn
+    read -p "  Möchtest Du trotzdem mit der Installation fortfahren? (j/n): " yn
     case $yn in
         [Jj]* ) break;;
         [Nn]* ) exit;;
-        * ) echo
-            echo -e "$RD
+        * ) echo 
+            echo -e "$RD 
 
-  Bitte antworte mit (j)a oder (n])in.
+  Bitte antworte mit (j)a oder (n])in. 
 
 $CL";;
     esac
 done
  else
-  echo -e "$GN    Installiere nun SAMBA DOCKER. $CL"
+  echo -e "$GN    Installiere nun den SAMBA Container. $CL"
  sleep 3
 fi
 
 }
 
+#------------------------------------------------------------------------------
 # Beginn Installation
+#------------------------------------------------------------------------------
 function inst-info {
+clear;
 
  echo -e "$GN
 
@@ -74,7 +87,9 @@ function inst-info {
 $CL"
 }
 
+#------------------------------------------------------------------------------
 # Yes No
+#------------------------------------------------------------------------------
 function ja-nein {
 echo
 while true; do
@@ -84,20 +99,23 @@ while true; do
         [Nn]* ) exit;;
         * ) echo;
 echo -e "${RD}
- Bitte antworte mit [j]a oder [n]ein.         
+ Bitte antworte mit (j)a oder (n)ein.         
 ${CL}";;
     esac
 done
 }
 
+#------------------------------------------------------------------------------
 # Erstellt die Verzeichnisse
+#------------------------------------------------------------------------------
 function mk-dirs {
-sudo rm -rfv $DOCKERDIR $SSDDIR
-sudo mkdir -pv $SDIR/{Data,Backup}; sudo chown -Rv $USER: $SSDDIR
-sudo mkdir -pv $SMBCONF
-sudo chown -Rv $USER: $DOCKERDIR
-cp -fv docker-compose.yaml $DOCKERDIR/docker-compose.yaml 
-cp -fv install.sh $DOCKERDIR
+echo
+sudo rm -rf /mnt/samba/
+sudo mkdir -p $SDIR/{Data,Backup}; sudo chown -R $USER: $SSDDIR
+sudo mkdir -p $SMBCONF
+sudo chown -R $USER: $DOCKERDIR
+cp -f docker-compose-smb.yaml $DOCKERDIR 
+cp -f install.sh $DOCKERDIR
 sleep 3
 }
 
@@ -108,12 +126,6 @@ echo Name des Admins.
 echo Hier z.B. [$USER] 
 echo ======================================
 read -p "Den Benutzernamen bitte: " SMBUSER
-echo
-echo Diese  ID '(ab 1000 und fortlaufend)' wird in SAMBA neu erstellt
-echo und hat mit dem lockalem User nichts zu tun.
-echo Hier z.B. [$UID]
-echo =============================================
-read -p "Die UserID  bitte: " USRID
 echo
 echo Das Passwort bitte, gut merken
 echo ======================================
@@ -134,7 +146,6 @@ echo
 echo -e "$GN
 
     Benutzername:  $SMBUSER
-          UserID:  $USRID
         Passwort:  $PASSW
 
   Backup Benutzer: $BUSER
@@ -156,13 +167,15 @@ while true; do
         [Nn]* ) exit;;
         * ) echo; 
 echo -e " $RD 
- Bitte antworte mit [j]a oder [n]ein. 
+ Bitte antworte mit (j)a oder (n)ein.
 $CL ";;
     esac
 done
 }
 
+#------------------------------------------------------------------------------
 # Erstellt die users.conf
+#------------------------------------------------------------------------------
 function add-smbuser {
 cat>/tmp/users.conf<<addsmbuser
 $SMBUSER:$USRID:$SMBUGRP:$USERSGRPID:$PASSW
@@ -170,7 +183,9 @@ $BUSER:$BUGID:$BUUSR:$BUGID:$BPASSW
 addsmbuser
 }
 
+#------------------------------------------------------------------------------
 # Erstellt die smb.conf
+#------------------------------------------------------------------------------
 function config-smb {
 cat>/tmp/smb.conf<<configsmb
 [global]
@@ -207,7 +222,9 @@ cat>/tmp/smb.conf<<configsmb
 configsmb
 }
 
+#------------------------------------------------------------------------------
 # Kopiert die Konfigs 
+#------------------------------------------------------------------------------
 function copy-configs {
 mv /tmp/smb.conf $SMBCONF
 mv /tmp/users.conf $SMBCONF
@@ -216,7 +233,8 @@ mv /tmp/users.conf $SMBCONF
 function config-info {
 cat<<info
 ===================================================
-Der neue SMB-Benutzer ist: $SMBUSER und hat die UID:$USRID 
+Der erste SMB-Benutzer ist: $SMBUSER und hat die UID:$USRID 
+Der Backup-Benutzer ist: $BUSER und hat die UID:$BUGID 
 
 Dies ist der neue Eintrag in der: $SMBCONF/users.conf
 
@@ -226,7 +244,9 @@ Dies ist der neue Eintrag in der: $SMBCONF/users.conf
 info
 }
 
+#------------------------------------------------------------------------------
 # Startet den Container
+#------------------------------------------------------------------------------
 function start-container {
 cat<<startcontainer
 
@@ -239,59 +259,78 @@ docker compose -f $DOCKERDIR/docker-compose.yaml up -d
 }
 
 function info-fertig {
-cat<<fertig
+echo -e "$GN
 
-...Ferig
+  ...Ferig
 
-fertig
+$CL";
 
 docker stats --no-stream
 sleep 3
-
-cat<<ende
-
-Der SAMBA Container mit der Image-ID: $(docker ps|grep samba  | awk '{print $1}' | cut -d/ -f1) wurde installiert.
-
-Die SMB-Freigaben: [Data] und [Backup]  sind jetzt erreichbar!
-
-Im Filemanager eingeben:
-
-  smb://$SMBUSER@$(hostname -I | awk '{print $1}' | cut -d/ -f1)/Data 
-  smb://$BUSER@$(hostname -I | awk '{print $1}' | cut -d/ -f1)/Backup 
- 
- oder
-
-  smb://$SMBUSER@$HOSTNAME/Data
-  smb://$BUSER@$HOSTNAME/Backup
-
-ende
 }
 
 # Yes or No
 function add-user {
 while true; do
-    read -p " Möchtest Du  einen wieteren Samba Benutzer anlegen? (j/n): " yn
+    read -p " Möchtest Du  einen weiteren Samba Benutzer anlegen? (j/n): " yn
     case $yn in
         [Jj]* ) break;;
         [Nn]* ) exit;;
-        * ) echo -e " $RD Bitte antworte mit [j]a oder [n]ein. $CL ";;
+        * ) echo -e " $RD Bitte antworte mit (ja) oder (nein). $CL ";;
     esac
 done
 ./addUser.sh
 }
 
+#------------------------------------------------------------------------------
+# installation finished
+#------------------------------------------------------------------------------
+function install-done {
+echo -e "${GN} 
+
+
+
+                   SAMBA DOCKER ist nun installiert!
+${CL}"
+
+echo -e "$CYNB
+
+  Der SAMBA Container mit der Image-ID: $(docker ps|grep samba  | awk '{print $1}' | cut -d/ -f1) wurde hochgefahren.
+
+  Die SMB-Freigaben: [Data] und [Backup]  sind jetzt erreichbar!
+
+ -----------------------------------------------------------------------
+  Im Filemanager eingeben:                                             
+ -----------------------------------------------------------------------
+
+  smb://$SMBUSER@$(hostname -I | awk '{print $1}' | cut -d/ -f1)/Data
+  smb://$BUSER@$(hostname -I | awk '{print $1}' | cut -d/ -f1)/Backup
+ 
+  oder
+                                        
+  smb://$SMBUSER@$HOSTNAME/Data
+  smb://$BUSER@$HOSTNAME/Backu
+
+ -----------------------------------------------------------------------
+$CL"
+}
+
 # Install starts
+clear
 check-inst
 inst-info
-ja-nein
+#ja-nein
 mk-dirs
 ask-userdata
 yes-or-no
 add-smbuser
+clear
 config-smb
 copy-configs
 config-info
 start-container
+clear
 info-fertig
+install-done
 add-user
 exit 0
