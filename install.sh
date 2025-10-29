@@ -114,7 +114,7 @@ sudo rm -rf /mnt/samba/
 sudo mkdir -p $SDIR/{Data,Backup}; sudo chown -R $USER: $SSDDIR
 sudo mkdir -p $SMBCONF
 sudo chown -R $USER: $DOCKERDIR
-cp -f docker-compose-smb.yaml $DOCKERDIR 
+cp -f docker-compose.yaml $DOCKERDIR 
 cp -f install.sh $DOCKERDIR
 sleep 3
 }
