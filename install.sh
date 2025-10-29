@@ -179,7 +179,7 @@ done
 function add-smbuser {
 cat>/tmp/users.conf<<addsmbuser
 $SMBUSER:$USRID:$SMBUGRP:$USERSGRPID:$PASSW
-$BUSER:$BUGID:$BUUSR:$BUGID:$BPASSW 
+$BUSER:$BUGID:$BUUSR:$USERSGRPID:$BPASSW 
 addsmbuser
 }
 
