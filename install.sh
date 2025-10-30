@@ -30,8 +30,6 @@ SMBCONF="/opt/samba/conf"
 #-------------
 # User
 #-------------
-USERSGRPID=100
-SMBGID=101
 USRID=1000
 BUGID=1001
 
@@ -40,8 +38,18 @@ BUGID=1001
 #-------------
 BUUSR="backupusr"
 BGRP="@backupusr"
+
+#-------------
+#SMB User
+#-------------
 SMBUGRP="users"
-SMBGRP="@users"
+USERSGID=100
+
+#-------------
+#SMB Gruppe
+#-------------
+SMBGRP="smb"
+SMBGID=101
 
 function check-inst {
 if [ -d /opt/samba ]; then 
@@ -110,6 +118,7 @@ done
 #------------------------------------------------------------------------------
 function mk-dirs {
 ./uninstall_SAMBA.sh
+echo
 sudo rm -rf /mnt/samba/
 sudo mkdir -p $SDIR/{Data,Backup}; sudo chown -R $USER: $SSDDIR
 sudo mkdir -p $SMBCONF
@@ -123,33 +132,19 @@ sleep 3
 function ask-userdata {
 echo
 echo Name des Admins.
+echo 'Darf auf [Data] & [Backup] (r/w) zugreifen' 
 echo Hier z.B. [$USER] 
-echo ======================================
+echo =============================================
 read -p "Den Benutzernamen bitte: " SMBUSER
 echo
 echo Das Passwort bitte, gut merken
 echo ======================================
 read -s -p "Das Passwort bitte: " PASSW
 echo
-# Backup User # neu
-echo
-echo Den Backup User anlegen.
-echo Hier z.B. [Backupuser]
-echo ======================================
-read -p "Den Backup Benutzernamen bitte: " BUSER
-echo
-echo Das Passwort für den Backupuser, 
-echo Bitte gut merken.
-echo ======================================
-read -s -p "Das Backup Passwort bitte: " BPASSW
-echo
 echo -e "$GN
 
-    Benutzername:  $SMBUSER
-        Passwort:  $PASSW
-
-  Backup Benutzer: $BUSER
-  Backup Passwort: $BPASSW
+             Admin:  $SMBUSER
+          Passwort:  $PASSW
 
 $CL"
 echo -e "$RD 
@@ -178,10 +173,10 @@ done
 #------------------------------------------------------------------------------
 function add-smbuser {
 cat>/tmp/users.conf<<addsmbuser
-$SMBUSER:$USRID:$SMBUGRP:$USERSGRPID:$PASSW
-$BUSER:$BUGID:$SMBUGRP:$USERSGRPID:$BPASSW 
+$SMBUSER:$USRID:$SMBGRP:$SMBGID:$PASSW
 addsmbuser
 }
+#$BUSER:$BUGID:$SMBUGRP:$USERSGID:$BPASSW 
 
 #------------------------------------------------------------------------------
 # Erstellt die smb.conf
@@ -203,7 +198,7 @@ cat>/tmp/smb.conf<<configsmb
 [Data]
         path = /storage/Data
         comment = Shared
-        valid users = $SMBGRP 
+        valid users = @$SMBUGRP,$SMBUSER
         browseable = yes
         writable = yes
         read only = no
@@ -213,7 +208,7 @@ cat>/tmp/smb.conf<<configsmb
 [Backup]
         path = /storage/Backup
         comment = Shared
-        valid users = $SMBUSER,$BUSER
+        valid users = @$SMBGRP
         browseable = yes
         writable = yes
         read only = no
@@ -239,7 +234,7 @@ Der Backup-Benutzer ist: $BUSER und hat die UID:$BUGID
 Dies ist der neue Eintrag in der: $SMBCONF/users.conf
 
  $SMBUSER:$USRID:$SMBGRP:$SMBGID:$PASSW
- $BUSER:$BUGID:$BUUSR:$BUGID:$BPASSW 
+  
 
 info
 }
@@ -304,12 +299,10 @@ echo -e "$CYNB
  -----------------------------------------------------------------------
 
   smb://$SMBUSER@$(hostname -I | awk '{print $1}' | cut -d/ -f1)/Data
-  smb://$BUSER@$(hostname -I | awk '{print $1}' | cut -d/ -f1)/Backup
  
   oder
                                         
   smb://$SMBUSER@$HOSTNAME/Data
-  smb://$BUSER@$HOSTNAME/Backu
 
  -----------------------------------------------------------------------
 $CL"
