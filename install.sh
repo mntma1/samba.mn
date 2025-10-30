@@ -5,19 +5,7 @@
 #-------------
 # Colors
 #-------------
-CYN=`echo "\033[0;36m"`   # cyan
-CYNB=`echo "\033[01;36m"` # cyan bold
-BLU=`echo "\033[0;34m"`   # blue
-BLUB=`echo "\033[01;34m"` # blue bold
-RD=`echo "\033[01;31m"` # red bold
-GN=`echo "\033[1;92m"`  # green bold
-BGN=`echo "\033[4;92m"` # green underline
-DGN=`echo "\033[32m"`   # dark green
-CL=`echo "\033[m"`      # clean
-BFR="\\r\\033[K"        # clear and new line
-HOLD="*"                # character in front of msg_info
-CM="${GN}✓${C}"         # green hook
-CROSS="${RD}✗${CL}"     # red cross
+source ./colors.env
 
 #------------------
 # Verzeichnisse
