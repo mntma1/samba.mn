@@ -20,6 +20,13 @@ USERSGRPID=100
 SMBGID=101
 
 clear;
+echo -e "$GN 
+
+
+    Dieser Benutzer darf nur auf [Data] (r/w) zugreifen.
+
+$CL"
+echo
 echo Einen weiteren Benutzer erstellen
 echo ======================================
 read -p "Den Benutzernamen bitte: " SMBUSER  
@@ -30,7 +37,7 @@ read -p "Die UID  bitte: " UUID
 echo
 echo Das Passwort bitte gut merken
 echo ======================================
-read -p "Das Passwort bitte: " PASSW
+read -s -p "Das Passwort bitte: " PASSW
 
 cat>>/opt/samba/conf/users.conf<<addsmbuser
 $SMBUSER:$UUID:$SMBUGRP:$USERSGRPID:$PASSW
@@ -49,14 +56,17 @@ Dies ist der neue Eintrag in der: /opt/samba/conf/users.conf
 Vielen Dank.
 
 ende
-echo --------------------------------------------------------------------------------------
+
 docker restart samba
 sleep 3
+
 docker logs samba
 
+echo
 echo -e "$GN
 
           Einen weiteren Benutzer anlegen? 
+          Dieser darf dann aber nur auf [Data] (r/w) zugreifen.
 
 $CL"
 
