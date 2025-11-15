@@ -208,7 +208,7 @@ configsmb
 #------------------------------------------------------------------------------
 # Kopiert die Konfigs 
 #------------------------------------------------------------------------------
-function copy-configs {
+function cp-configs {
 mv /tmp/smb.conf $SMBCONF
 mv /tmp/users.conf $SMBCONF
 }
@@ -307,7 +307,7 @@ yes-or-no
 add-smbuser
 clear
 config-smb
-copy-configs
+cp-configs
 config-info
 start-container
 clear
